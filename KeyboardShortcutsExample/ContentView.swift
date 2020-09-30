@@ -14,50 +14,50 @@ struct ContentView: View {
 	@State var selectedURL: URL?
 	var body: some View {
 		VStack {
-			HStack {
-				KeyboardShortcuts.Recorder(for: .testShortcut1)
-					.padding(.trailing, 10)
-				Text("Pressed? \(isPressed1 ? "👍" : "👎") \(softwarePath)")
-					.frame(width: 100, alignment: .leading)
-				
-				Button(action: {
-					let panel = NSOpenPanel()
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-						let result = panel.runModal()
-						if result == .OK {
-							self.selectedURL = panel.url
-							softwarePath = self.selectedURL!.path
+			VStack(alignment: .leading) {
+				HStack {
+					KeyboardShortcuts.Recorder(for: .testShortcut1)
+						.padding(.trailing, 10)
+					Text("Pressed? \(isPressed1 ? "👍" : "👎") \(softwarePath)")
+						.frame(width: 100, alignment: .leading)
+					
+					Button(action: {
+						let panel = NSOpenPanel()
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+							let result = panel.runModal()
+							if result == .OK {
+								self.selectedURL = panel.url
+								softwarePath = self.selectedURL!.path
+							}
 						}
+					}) {
+						Text("Select Software")
 					}
-				}) {
-					Text("Select Software")
 				}
-			}
-			HStack {
-				KeyboardShortcuts.Recorder(for: .testShortcut2)
-					.padding(.trailing, 10)
-				Text("Pressed? \(isPressed2 ? "👍" : "👎") \(scriptPath)")
-					.frame(width: 100, alignment: .leading)
-				Button(action: {
-					let panel = NSOpenPanel()
-					DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-						let result = panel.runModal()
-						if result == .OK {
-							self.selectedURL = panel.url
-							scriptPath = self.selectedURL!.path
+				HStack {
+					KeyboardShortcuts.Recorder(for: .testShortcut2)
+						.padding(.trailing, 10)
+					Text("Pressed? \(isPressed2 ? "👍" : "👎") \(scriptPath)")
+						.frame(width: 100, alignment: .leading)
+					Button(action: {
+						let panel = NSOpenPanel()
+						DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+							let result = panel.runModal()
+							if result == .OK {
+								self.selectedURL = panel.url
+								scriptPath = self.selectedURL!.path
+							}
 						}
+					}) {
+						Text("Select Script")
 					}
-				}) {
-					Text("Select Script")
 				}
-			}
-			Spacer()
+			}.padding(60)
 			Divider()
 			Button("Reset All") {
 				KeyboardShortcuts.reset(.testShortcut1, .testShortcut2)
 			}
-		}
-			.frame(maxWidth: 300)
+			.frame(minWidth: 300)
 			.padding(60)
 			.onAppear {
 				KeyboardShortcuts.onKeyDown(for: .testShortcut1) {
@@ -82,6 +82,7 @@ struct ContentView: View {
 					isPressed2 = false
 				}
 			}
+		}
 	}
 }
 

@@ -15,7 +15,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 				.titled,
 				.closable,
 				.miniaturizable,
-				.fullSizeContentView
+				.fullSizeContentView,
+				.resizable
 			],
 			backing: .buffered,
 			defer: false
