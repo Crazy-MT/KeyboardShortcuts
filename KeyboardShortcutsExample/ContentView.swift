@@ -9,8 +9,8 @@ extension KeyboardShortcuts.Name {
 struct ContentView: View {
 	@State private var isPressed1 = false
 	@State private var isPressed2 = false
-	@State var softwarePath: String = ""
-	@State var scriptPath: String = ""
+	@State var path1: String = ""
+	@State var path2: String = ""
 	@State var selectedURL: URL?
 	var body: some View {
 		VStack {
@@ -18,8 +18,8 @@ struct ContentView: View {
 				HStack {
 					KeyboardShortcuts.Recorder(for: .testShortcut1)
 						.padding(.trailing, 10)
-					Text("Pressed? \(isPressed1 ? "👍" : "👎") \(softwarePath)")
-						.frame(width: 100, alignment: .leading)
+					Text("Pressed? \(isPressed1 ? "👍" : "👎") \(path1)")
+						.frame(minWidth: 100, alignment: .leading)
 					
 					Button(action: {
 						let panel = NSOpenPanel()
@@ -27,29 +27,29 @@ struct ContentView: View {
 							let result = panel.runModal()
 							if result == .OK {
 								self.selectedURL = panel.url
-								softwarePath = self.selectedURL!.path
+								path1 = self.selectedURL!.path
 							}
 						}
 					}) {
-						Text("Select Software")
+						Text("Select Software or Script")
 					}
 				}
 				HStack {
 					KeyboardShortcuts.Recorder(for: .testShortcut2)
 						.padding(.trailing, 10)
-					Text("Pressed? \(isPressed2 ? "👍" : "👎") \(scriptPath)")
-						.frame(width: 100, alignment: .leading)
+					Text("Pressed? \(isPressed2 ? "👍" : "👎") \(path2)")
+						.frame(minWidth: 100, alignment: .leading)
 					Button(action: {
 						let panel = NSOpenPanel()
 						DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 							let result = panel.runModal()
 							if result == .OK {
 								self.selectedURL = panel.url
-								scriptPath = self.selectedURL!.path
+								path2 = self.selectedURL!.path
 							}
 						}
 					}) {
-						Text("Select Script")
+						Text("Select Software or Script")
 					}
 				}
 			}.padding(60)
@@ -62,8 +62,8 @@ struct ContentView: View {
 			.onAppear {
 				KeyboardShortcuts.onKeyDown(for: .testShortcut1) {
 					isPressed1 = true
-					let appPath = softwarePath
-					NSWorkspace.shared.openFile(appPath) // "/Applications/WeChat.app/"
+					
+					runSoftOrScript(path: path1)
 				}
 
 				KeyboardShortcuts.onKeyUp(for: .testShortcut1) {
@@ -72,10 +72,8 @@ struct ContentView: View {
 
 				KeyboardShortcuts.onKeyDown(for: .testShortcut2) {
 					isPressed2 = true
-					let task = Process()
-					task.launchPath = scriptPath //"/Users/mt/project/KeyboardShortcuts/makeandroid.sh"
-					task.launch()
-					task.waitUntilExit()
+					
+					runSoftOrScript(path: path2)
 				}
 
 				KeyboardShortcuts.onKeyUp(for: .testShortcut2) {
@@ -83,6 +81,20 @@ struct ContentView: View {
 				}
 			}
 		}
+	}
+}
+
+private func runSoftOrScript(path: String) {
+	if path.contains(".app") {
+		let appPath = path
+		NSWorkspace.shared.openFile(appPath) // "/Applications/WeChat.app/"
+	}
+	
+	if path.contains(".sh") {
+		let task = Process()
+		task.launchPath = path //"/Users/mt/project/KeyboardShortcuts/makeandroid.sh"
+		task.launch()
+		task.waitUntilExit()
 	}
 }
 
