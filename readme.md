@@ -7,7 +7,7 @@ This package lets you add support for user-customizable global keyboard shortcut
 
 I'm happy to accept more configurability and features. PR welcome! What you see here is just what I needed for my own apps.
 
-<img src="https://github.com/sindresorhus/KeyboardShortcuts/raw/master/screenshot.png" width="532">
+<img src="https://github.com/Crazy-MT/KeyboardShortcuts/raw/master/screenshot.png" width="532">
 
 ## Requirements
 
